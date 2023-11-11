@@ -1,5 +1,48 @@
 <?php
-include("../connection/conn.php")
+include("../connection/conn.php");
+
+
+if (isset($_POST['register_user'])) {
+    $agent_name = $_POST['agent_name'];
+    //echo $agent_name;
+    $agent_organisation = $_POST['agent_organisation'];
+    //echo $agent_organisation;
+    $agency_address = $_POST['agency_address'];
+    //echo $agency_address;
+    $agency_email = $_POST['agency_email'];
+
+    $agency_contact = $_POST['agency_contact'];
+
+    $email_exist = "SELECT * FROM agency WHERE agency_email='$agency_email'";
+    $email_result = mysqli_query($conn, $email_exist);
+    $fetch_result = mysqli_fetch_assoc($email_result);
+
+    if (!$fetch_result) {
+        echo "<script>alert('email does not exist') </script>";
+    }
+
+    $first_name = $_POST['first_name'];
+    //echo $first_name;
+    $surname = $_POST['surname'];
+    //echo $surname;
+    $contact_number = $_POST['contact_number'];
+    //echo $contact_number;
+    $address = $_POST['address'];
+    //echo $address;
+    $postcode = $_POST['postcode'];
+    //echo $postcode;
+    $receipt_benefit = $_POST['receipt_benefit'];
+    //echo $receipt_benefit;
+    $household_demographic = $_POST['household_demographic'];
+    $benefit_comment = $_POST['benefit_comment'];
+    //echo $benefit_comment;
+    $ethnicity = $_POST['ethnicity'];
+    //echo $ethnicity;
+    $age = $_POST['age'];
+    //echo $age;
+    $referral_consent = $_POST['referral_consent'];
+    $user_availability = $_POST['user_availability'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -50,7 +93,7 @@ include("../connection/conn.php")
                 </div>
                 <div>
                     <input type="checkbox" name="user_availability" value="no" id="no">
-                    <label for="referral_consent" class="form-label">No</label>
+                    <label for="user_availability" class="form-label">No</label>
                 </div>
             </div>
             <div class="form-outline mb-4 w-50 m-auto">
@@ -153,6 +196,10 @@ include("../connection/conn.php")
                     <input type="checkbox" name="age" value="over-65" id="no">
                     <label for="age" class="form-label">Over - 65</label>
                 </div>
+            </div>
+
+            <div class="form-outline mb-4 w-50 m-auto">
+                <input type="submit" name="register_user" class="btn btn-info" value="Register_user ">
             </div>
         </form>
     </div>
