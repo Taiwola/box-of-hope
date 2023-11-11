@@ -27,7 +27,7 @@ class Box
     public $postcode;
     public $receipt_of_benefit;
     public $benefit_comment;
-    public $house_demographic;
+    public $household_demographic;
     public $ethnicity;
     public $age;
 
@@ -81,7 +81,21 @@ class Box
     }
 
 
-    function getUserDetails($userId)
+    function registerUser()
     {
+        //create query
+        $insert_query = "INSERT INTO $this->users (first_name, surname, contact_number, address, postcode, receipt_of_benefit, benefit_comment, household_demographic, ethnicity, age)
+        VALUES
+        ('$this->first_name', '$this->surname', '$this->contact_number', '$this->address', $this->postcode, '$this->receipt_of_benefit', '$this->benefit_comment', '$this->household_demographic', '$this->ethnicity', '$this->age')
+        ";
+        $query_result = $this->conn->query($insert_query);
+
+        if ($query_result) {
+            return true;
+        } else {
+            http_response_code(400);
+            printf("Error %s. \n", $this->conn->error);
+            return false;
+        }
     }
 }
