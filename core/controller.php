@@ -57,9 +57,29 @@ class Box
         }
     }
 
-    function registerAgency($data)
+    function registerAgency()
     {
+        $search_query = "SELECT * FROM $this->agency WHERE agency_email='$this->agency_email' ";
+        $result = $this->conn->query($search_query);
+        $row_count = $result->num_rows;
+        if ($row_count > 0 && $result) {
+            http_response_code(409);
+            echo 'Email already exists';
+            return false;
+        }
+        $insert_query = "INSERT INTO $this->agency (agency_name,agency_address,agency_email,agency_contact,agent_name) VALUES 
+        ('$this->agency_name', '$this->agency_address', '$this->agency_email', $this->agency_contact, '$this->agent_name')
+        ";
+        $query_result = $this->conn->query($insert_query);
+
+        if ($query_result) {
+            return true;
+        } else {
+            printf("Error %s. \n", $this->conn->error);
+            return false;
+        }
     }
+
 
     function getUserDetails($userId)
     {
