@@ -8,9 +8,8 @@ include_once('../core/initialize.php');
 
 $box = new Box($conn);
 
-$results =
 
-    $data = json_decode(file_get_contents("php://input"));
+$data = json_decode(file_get_contents("php://input"));
 
 if ($data) {
     $box->agency_email = $data->agency_email;
