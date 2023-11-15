@@ -6,9 +6,11 @@ header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type
 
 include_once('../core/initialize.php');
 
-$box = new Box($conn);
+$agency = new Agency($conn);
 
 
-$results = $box->getAgent();
+// Get the list of agencies from the database.
+$results = $agency->getAgent();
 
+// Encode the results as JSON and send the response.
 echo json_encode($results);

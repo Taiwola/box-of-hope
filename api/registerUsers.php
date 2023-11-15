@@ -6,26 +6,32 @@ header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type
 
 include_once('../core/initialize.php');
 
-$box = new Box($conn);
+// Create a new instance of the User class
+$user = new User($conn);
 
 
+// Decode the JSON data received in the request body.
 $data = json_decode(file_get_contents("php://input"));
 
+// Check if valid data was received.
 if ($data) {
-    $box->first_name = $data->first_name;
-    $box->surname = $data->surname;
-    $box->contact_number = $data->contact_number;
-    $box->address = $data->address;
-    $box->postcode = $data->postcode;
-    $box->receipt_of_benefit = $data->receipt_of_benefit;
-    $box->benefit_comment = $data->benefit_comment;
-    $box->household_demographic = $data->household_demographic;
-    $box->ethnicity = $data->ethnicity;
-    $box->age = $data->age;
+    // Set properties of the User instance with the data received.
+    $user->first_name = $data->first_name;
+    $user->surname = $data->surname;
+    $user->contact_number = $data->contact_number;
+    $user->address = $data->address;
+    $user->postcode = $data->postcode;
+    $user->receipt_of_benefit = $data->receipt_of_benefit;
+    $user->benefit_comment = $data->benefit_comment;
+    $user->household_demographic = $data->household_demographic;
+    $user->ethnicity = $data->ethnicity;
+    $user->age = $data->age;
 
-    if ($box->registerUser()) {
+    if ($user->registerUser()) {
         echo json_encode(array("message" => "Registration Successful!", "status" => true));
     } else {
+        // If registration fails, set a 500 Internal Server Error response.
+        http_response_code(500);
         http_response_code(500);
         echo json_encode(array("message" => "Error Registering User.", "status" => false));
     }

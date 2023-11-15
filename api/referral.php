@@ -6,54 +6,51 @@ header('Access-Control-Allow-Headers: Access-Control-Allow-Headers, Content-Type
 
 include_once('../core/initialize.php');
 
-$box = new Box($conn);
+$referred = new Referred($conn);
 
 
 $data = json_decode(file_get_contents("php://input"));
 
 if ($data) {
-    $box->agency_email = $data->agency_email;
-    $box->agent_name = $data->agent_name;
-    $box->agency_name = $data->agency_name;
-    $box->agency_address = $data->agency_address;
-    $box->agency_contact = $data->agency_contact;
+    $referred->agency_email = $data->agency_email;
+    $referred->agent_name = $data->agent_name;
+    $referred->agency_name = $data->agency_name;
+    $referred->agency_address = $data->agency_address;
+    $referred->agency_contact = $data->agency_contact;
 
-    $box->first_name = $data->first_name;
-    $box->surname = $data->surname;
-    $box->contact_number = $data->contact_number;
-    $box->address = $data->address;
-    $box->postcode = $data->postcode;
-    $box->receipt_of_benefit = $data->receipt_of_benefit;
-    $box->benefit_comment = $data->benefit_comment;
-    $box->household_demographic = $data->household_demographic;
-    $box->ethnicity = $data->ethnicity;
-    $box->age = $data->age;
+    $referred->first_name = $data->first_name;
+    $referred->surname = $data->surname;
+    $referred->contact_number = $data->contact_number;
+    $referred->address = $data->address;
+    $referred->postcode = $data->postcode;
+    $referred->receipt_of_benefit = $data->receipt_of_benefit;
+    $referred->benefit_comment = $data->benefit_comment;
+    $referred->household_demographic = $data->household_demographic;
+    $referred->ethnicity = $data->ethnicity;
+    $referred->age = $data->age;
 
-    $box->referral_consent = $data->referral_consent;
-    $box->availability = $data->availability;
-    $box->reason_for_referral = $data->reason_for_referral;
+    $referred->referral_consent = $data->referral_consent;
+    $referred->availability = $data->availability;
+    $referred->reason_for_referral = $data->reason_for_referral;
 
 
-    if ($result = $box->registerUsingReferral()) {
+    $result = $referred->registerUsingReferral();
 
-        if ($result == true) {
-            echo json_encode(array(
-                "message" => "Registration Successful",
-                "status" => true,
-            ));
-        } else {
-            echo json_encode(array(
-                "message" => "Error Occurred While Registering User",
-                "status" => false,
-            ));
-        }
+    if ($result !== false) {
+        echo json_encode(array(
+            "message" => "Registration Successful",
+            "status" => true,
+        ));
     } else {
+        // If registration fails, set a 500 Internal Server Error response.
         http_response_code(500);
         echo json_encode(array(
-            "message" => "Error Occurred",
+            "message" => "Error Occurred While Registering User",
+            "status" => false,
         ));
     }
 } else {
+    // If no data is provided in the request, set a 500 Internal Server Error response.
     http_response_code(500);
     echo json_encode(['message' => 'No data provided']);
     exit;
